@@ -1,0 +1,127 @@
+/* Global styles */
+:root {
+    --primary-color: #EF5350;
+    --secondary-color: #e0e0e0;
+    --content-color: #ffffff;
+    --font-color: #333333;
+}
+
+body {
+    color: var(--font-color);
+    background: var(--secondary-color);
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Museo', 'sans-serif';
+}
+
+a {
+    color: var(--font-color);
+    transition: all .3s ease;
+}
+
+i {
+    transition: all .3s ease;
+}
+
+div.inner-container {
+    margin-top: 50px;
+}
+
+.alert {
+    display: block;
+    padding: 10px;
+    border-radius: 5px;
+    font-size: 1.1rem;
+    color: var(--font-color);
+    background: #ffffff;
+    border: var(--secondary-color);
+}
+
+.alert-success {
+    color: #005300;
+    background: #a1e0b0;
+    border: 1px solid #00b300;
+}
+
+.alert-failure {
+    color: #830909;
+    background: #f8d7da;
+    border: 1px solid #ca0b0b;
+}
+
+.helper-text {
+    color: red !important;
+}
+
+/* Change default coloring for input fields */
+/* Custom Checkbox Colors */
+/* .input-field input[type="checkbox"]:checked + span::before { */
+    /* border-bottom: 2px solid var(--primary-color) !important; */
+    /* border-right: 2px solid var(--primary-color) !important; */
+/* } */
+
+/* Side-Nav Styles */
+.sidenav > li {
+    padding: 5px 0;
+}
+
+.sidenav > .divider {
+    margin: 0;
+}
+
+ul.sidenav li > a:hover,
+ul.sidenav li a:hover i {
+    color: var(--primary-color);
+}
+
+/* Main container styles */
+.row .l4 > .side-bar {
+    background: var(--content-color);
+    border: 1px solid var(--content-color);
+    margin-top: 50px;
+    padding: 10px;
+}
+
+/* Articles styles */
+.article-author {
+    color: var(--primary-color);
+    font-weight: bold;
+    display: inline-block;
+    padding: 10px 15px;
+}
+
+.text-muted {
+    color: var(--font-color);
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.media-container {
+    background: var(--content-color);
+    padding: 15px;
+    margin: 0 0 30px;
+}
+
+.media-container a:hover {
+    color: var(--primary-color);
+}
+
+.media-container form.row {
+    padding-top: 20px;
+}
+
+.media-container .text-muted > a {
+    display: inline-block;
+    margin-left: 5px;
+    color: var(--primary-color);
+}
+
+/* Login styles */
+label[for='remember'] {
+    position: static;
+}
+
+p.forgot-pass {
+    margin-left: 55px;
+}

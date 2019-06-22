@@ -1,0 +1,27 @@
+<nav class="red lighten-1">
+    <div class="container">
+        <div class="nav-wrapper">
+            <a href="/" class="brand-logo center">Flask Blog</a>
+            <a href="javascript: void(0);" data-target="mobile-nav" class="sidenav-trigger"><i
+                    class="material-icons">menu</i></a>
+            <ul class="left hide-on-med-and-down">
+                <li><a href="{{url_for('index')}}">Home</a></li>
+                <li><a href="{{url_for('about')}}">About</a></li>
+            </ul>
+            <ul class="right hide-on-med-and-down">
+                <li><a href="{{url_for('login')}}">Login</a></li>
+                <li><a href="{{url_for('register')}}">Register</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<ul class="sidenav" id="mobile-nav">
+    <li><a href="{{url_for('index')}}"><i class="material-icons">home</i>Home</a></li>
+    <div class="divider"></div>
+    <li><a href="{{url_for('about')}}"><i class="material-icons">info</i>About</a></li>
+    <div class="divider"></div>
+    <li><a href="{{url_for('login')}}"><i class="material-icons">person</i>Login</a></li>
+    <div class="divider"></div>
+    <li><a href="{{url_for('register')}}"><i class="material-icons">person_add</i>Register</a></li>
+</ul>
