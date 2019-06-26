@@ -31,6 +31,7 @@ div.inner-container {
 .alert {
     display: block;
     padding: 10px;
+    margin-bottom: 15px;
     border-radius: 5px;
     font-size: 1.1rem;
     color: var(--font-color);
@@ -44,14 +45,26 @@ div.inner-container {
     border: 1px solid #00b300;
 }
 
+.alert-info {
+    color: #2354a8;
+    background: #cce5ff;
+    border: 1px solid #41c2fd;
+}
+
 .alert-failure {
     color: #830909;
-    background: #f8d7da;
-    border: 1px solid #ca0b0b;
+    background: #fae1e3;
+    border: 1px solid #f87676;
 }
 
 .helper-text {
     color: red !important;
+}
+
+.secondary-text {
+    color: #888888;
+    font-size: .85rem;
+    word-wrap: break-word;
 }
 
 /* Change default coloring for input fields */
@@ -61,19 +74,39 @@ div.inner-container {
     /* border-right: 2px solid var(--primary-color) !important; */
 /* } */
 
-/* Side-Nav Styles */
-.sidenav > li {
+/* Main-Nav styles */
+.nav-img {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+}
+
+.dropdown-trigger .s3 {
+    margin: 7px 0 0;
+    height: 35px;
+}
+
+.dropdown-trigger i {
+    margin-left: 0;
+}
+
+/* Side-Nav styles */
+.not-logged > li {
     padding: 5px 0;
 }
 
 .sidenav > .divider {
     margin: 0;
+    padding: 0;
 }
 
 ul.sidenav li > a:hover,
 ul.sidenav li a:hover i {
     color: var(--primary-color);
 }
+
+/* Side-Nav profile-styles */
+/* ... */
 
 /* Main container styles */
 .row .l4 > .side-bar {
@@ -99,7 +132,7 @@ ul.sidenav li a:hover i {
 
 .media-container {
     background: var(--content-color);
-    padding: 15px;
+    padding: 20px;
     margin: 0 0 30px;
 }
 
@@ -124,4 +157,22 @@ label[for='remember'] {
 
 p.forgot-pass {
     margin-left: 55px;
+}
+
+/* Account styles */
+.profile-container {
+    padding: 15px 0;
+    margin: 0 10px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+}
+
+.rounded-img {
+    width: 130px;
+    height: 130px;
+    border-radius: 10%;
+}
+
+.row > h4 {
+    margin-top: 0;
 }

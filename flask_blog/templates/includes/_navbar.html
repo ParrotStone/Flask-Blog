@@ -2,21 +2,67 @@
     <div class="container">
         <div class="nav-wrapper">
             <a href="/" class="brand-logo center">Flask Blog</a>
+            {% if current_user.is_authenticated %}
+            <a href="javascript: void(0);" data-target="mobile-nav-profile" class="sidenav-trigger"><i
+                    class="material-icons">menu</i></a>
+            {% else %}
             <a href="javascript: void(0);" data-target="mobile-nav" class="sidenav-trigger"><i
                     class="material-icons">menu</i></a>
+            {% endif %}
             <ul class="left hide-on-med-and-down">
                 <li><a href="{{url_for('index')}}">Home</a></li>
                 <li><a href="{{url_for('about')}}">About</a></li>
             </ul>
             <ul class="right hide-on-med-and-down">
+                {% if current_user.is_authenticated %}
+                <ul id="account-dropdown" class="dropdown-content">
+                    <li><a href="{{url_for('account')}}">Account</a></li>
+                    <li><a href="{{url_for('logout')}}">Logout</a></li>
+                </ul>
+                <li><a class="dropdown-trigger" href="javascript: void(0);" data-target="account-dropdown">
+                        <div class="row">
+                            <div class="col s3">
+                                <img src="{{img_file_src}}" alt="profile_pic" class="nav-img">
+                            </div>
+                            <div class="col s9">
+                                {{current_user.username.split(' ')[0].title()}}
+                                <i class="material-icons right">arrow_drop_down</i>
+                            </div>
+                        </div>
+                    </a></li>
+                {% else %}
                 <li><a href="{{url_for('login')}}">Login</a></li>
                 <li><a href="{{url_for('register')}}">Register</a></li>
+                {% endif %}
             </ul>
         </div>
     </div>
 </nav>
 
-<ul class="sidenav" id="mobile-nav">
+{% if current_user.is_authenticated %}
+<ul id="mobile-nav-profile" class="sidenav">
+    <li>
+        <div class="user-view">
+            <div class="background">
+                <img src="{{url_for('static', filename='images/account_office.jpg')}}" alt="profile-office-img">
+            </div>
+            <span><img class="circle" src="{{img_file_src}}"></span>
+            <span class="white-text name">{{current_user.username.title()}}</span>
+            <span class="white-text email">{{current_user.email}}</span>
+        </div>
+    </li>
+
+    <li><a href="{{url_for('index')}}"><i class="material-icons">home</i>Home</a></li>
+    <div class="divider"></div>
+    <li><a href="{{url_for('about')}}"><i class="material-icons">info</i>About</a></li>
+    <div class="divider"></div>
+    <!-- Insert New Links HERE -->
+    <li><a href="{{url_for('account')}}"><i class="material-icons">account_circle</i>Account</a></li>
+    <div class="divider"></div>
+    <li><a href="{{url_for('logout')}}"><i class="material-icons">exit_to_app</i>Logout</a></li>
+</ul>
+{% else %}
+<ul class="sidenav not-logged" id="mobile-nav">
     <li><a href="{{url_for('index')}}"><i class="material-icons">home</i>Home</a></li>
     <div class="divider"></div>
     <li><a href="{{url_for('about')}}"><i class="material-icons">info</i>About</a></li>
@@ -25,3 +71,4 @@
     <div class="divider"></div>
     <li><a href="{{url_for('register')}}"><i class="material-icons">person_add</i>Register</a></li>
 </ul>
+{% endif %}

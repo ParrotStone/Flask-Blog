@@ -9,12 +9,12 @@
         <div class="input-field col s10 m10 push-s1 push-m1">
             <i class="material-icons prefix">account_circle</i>
             {% if form.username.errors %}
-            {{ form.username(id='username', class='invalid', **{'data-length': '30'}) }}
+            {{ form.username(id='username', class='invalid', **{'data-length': '25'}) }}
             {% for error in form.username.errors %}
             <span class="helper-text" data-error="{{error}}">{{error}}</span>
             {% endfor %}
             {% else %}
-            {{ form.username(id='username', **{'data-length': '30'}) }}
+            {{ form.username(id='username', **{'data-length': '25'}) }}
             {% endif %}
             {{ form.username.label(for='username') }}
         </div>
@@ -55,7 +55,7 @@
             {{ form.confirm_password.label(for='confirm_password') }}
         </div>
         <div class="input-field col s10 m10 push-s1 push-m1">
-            {{ form.submit(class='waves-effect waves-light btn yellow darken-1') }}
+            <button type="submit" class="waves-effect waves-light btn yellow darken-1 black-text">Sign Up</button>
         </div>
     </form>
     <div class="divider"></div>

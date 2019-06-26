@@ -1,0 +1,81 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="media-container">
+    <div class="row">
+        <div class="col s6 center-align">
+            <div class="profile-container">
+                <img src="{{img_file_src}}" alt="profile_pic" class="rounded-img">
+                <h6>{{current_user.username}}</h6>
+                <span class="secondary-text">{{current_user.email}}</span>
+            </div>
+        </div>
+        <h4 class="center-align">Brief Info</h4>
+        <div class="valign-wrapper">
+            <p class="secondary-text">
+                {{current_user.brief_info}}
+            </p>
+        </div>
+    </div>
+    <div class="divider"></div>
+    <h5>Update Account Info</h5>
+    <form action="" method="POST" enctype="multipart/form-data" class="row">
+        {{ form.hidden_tag() }}
+        <div class="input-field col s10 m10 push-s1 push-m1">
+            <i class="material-icons prefix">account_circle</i>
+            {% if form.username.errors %}
+            {{ form.username(id='username', class='invalid', **{'data-length': '25'}) }}
+            {% for error in form.username.errors %}
+            <span class="helper-text" data-error="{{error}}">{{error}}</span>
+            {% endfor %}
+            {% else %}
+            {{ form.username(id='username', **{'data-length': '25'}) }}
+            {% endif %}
+            {{ form.username.label(for='username') }}
+        </div>
+        <div class="input-field col s10 m10 push-s1 push-m1">
+            <i class="material-icons prefix">email</i>
+            {% if form.email.errors %}
+            {{ form.email(id='email', class='invalid') }}
+            {% for error in form.email.errors %}
+            <span class="helper-text" data-error="{{error}}">{{error}}</span>
+            {% endfor %}
+            {% else %}
+            {{ form.email(id='email') }}
+            {% endif %}
+            {{ form.email.label(for='email') }}
+        </div>
+        <div class="input-field col s10 m10 push-s1 push-m1">
+            <i class="material-icons prefix">note</i>
+            {% if form.brief_info.errors %}
+            {{ form.brief_info(id='brief_info', class='invalid materialize-textarea', **{'data-length': '130'}) }}
+            {% for error in form.brief_info.errors %}
+            <span class="helper-text" data-error="{{error}}">{{error}}</span>
+            {% endfor %}
+            {% else %}
+            {{ form.brief_info(id='brief_info', class='materialize-textarea', **{'data-length': '130'}) }}
+            {% endif %}
+            {{ form.brief_info.label(for='brief_info') }}
+        </div>
+        <div class="file-field input-field col s10 m10 push-s1 push-m1">
+            <div class="btn">
+                <i class="material-icons left">attach_file</i>
+                {{form.img.label(class='white-text')}}
+                {{form.img}}
+            </div>
+            <div class="file-path-wrapper">
+                <input class="file-path" type="text" placeholder="Upload a .png/.jpg picture format">
+            </div>
+            {% if form.img.errors %}
+            {% for error in form.img.errors %}
+            <span class="helper-text" data-error="{{error}}">{{error}}</span>
+            {% endfor %}
+            {% endif %}
+        </div>
+        <div class="input-field col s10 m10 push-s1 push-m1">
+            <button type="submit" class="waves-effect waves-light btn yellow darken-1 black-text">Update
+                Account</button>
+        </div>
+    </form>
+</div>
+{% endblock body %}
