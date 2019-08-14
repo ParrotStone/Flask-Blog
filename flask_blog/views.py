@@ -1,49 +1,31 @@
 import os
 import secrets
+from datetime import datetime
+# The new renamed module for url manipulations for Python3
+from urllib.parse import urlparse, urljoin
 from PIL import Image
-from flask import render_template, request, flash, redirect, url_for
+from flask import render_template, request, flash, redirect, url_for, abort
 from flask_login import login_user, current_user, logout_user, login_required
 from flask_blog import app, app_bcrypt, db
-from flask_blog.forms import RegisterationForm, LoginForm, UpdateAccountForm
+from flask_blog.forms import RegisterationForm, LoginForm, UpdateAccountForm, PostForm
 from flask_blog.models import User, Post
 
 
-posts = [
-    {
-        'author': 'Abdulrahman Ali',
-        'title': 'First Article',
-        'content': 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et praesentium vel, sint consequuntur nihil enim earum in! Vel exercitationem animi eveniet harum minus nemo autem necessitatibus, iste officia debitis odit?',
-        'date_created': 'October 12, 2019'
-    },
-    {
-        'author': 'Jane Doe',
-        'title': 'Second Article',
-        'content': 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et praesentium vel, sint consequuntur nihil enim earum in! Vel exercitationem animi eveniet harum minus nemo autem necessitatibus, iste officia debitis odit?',
-        'date_created': 'October 15, 2019'
-    },
-    {
-        'author': 'John Smith',
-        'title': 'Third Article',
-        'content': 'Lorem ipsum, dolor sit amet consectetur adipisicing elit. Et praesentium vel, sint consequuntur nihil enim earum in! Vel exercitationem animi eveniet harum minus nemo autem necessitatibus, iste officia debitis odit?',
-        'date_created': 'March 12, 2019'
-    }
-]
-
-
-# Displaying profile picture
+# Display profile picture
 def get_img_src():
     # Will return None in case the user is not logged in which will not affect anything since the damn block of navigation doesn't show up unless the user is logged in
     if current_user.is_authenticated:
         if current_user.img_file == 'default.png':
             return url_for('static', filename=f'images/profile_pics/{current_user.img_file}')
 
-        return url_for('static', filename=f'images/profile_pics/{current_user.profile_dir}/{current_user.img_file}')
+        return url_for('static', filename=f'images/profile_pics/{current_user.profile_dir}{current_user.img_file}')
 
     return None
 
 
 @app.route('/')
 def index():
+    posts = Post.query.all()
     return render_template('index.html', page_title='Flask Blog | Welcome!', posts=posts, img_file_src=get_img_src())
 
 
@@ -64,11 +46,11 @@ def register():
                 form.password.data, 13).decode('utf-8')
             user_path = os.path.join(
                 app.root_path, 'static/images/profile_pics/')
-            user_filename = secrets.token_hex(12)
-            full_user_path = f'{user_path}{user_filename}'
+            user_dir_name = f'{secrets.token_hex(12)}/'
+            full_user_path = f'{user_path}{user_dir_name}'
             os.mkdir(full_user_path)
             user = User(username=form.username.data.strip(),
-                        email=form.email.data.lower(), profile_dir=user_filename, password=hashed_pwd)
+                        email=form.email.data.lower(), profile_dir=user_dir_name, password=hashed_pwd)
 
             db.session.add(user)
             db.session.commit()
@@ -78,6 +60,13 @@ def register():
         flash(f'The submitted data is not corrent. Please enter correct info!', 'failure')
 
     return render_template('register.html', page_title='Flask Blog | Register', form=form)
+
+
+# Checking the safety of the URL to prevent open-redirects attacks
+def is_safe_url(target):
+    ref_url = urlparse(request.host_url)
+    test_url = urlparse(urljoin(request.host_url, target))
+    return test_url.scheme in ('http', 'https') and ref_url.netloc == test_url.netloc
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -93,7 +82,9 @@ def login():
             login_user(user, remember=form.remember.data)
             next_page = request.args.get('next')
             # The way down here helps you avoid 'open redirects' attacks by redirecting either to account/index - See the documentation for more details
-            return redirect(url_for('account')) if next_page else redirect(url_for('index'))
+            # return redirect(f'{next_page}') if is_safe_url(next_page) else redirect(url_for('index'))
+            # Another way using the is_safe_url() function which was written by the Flask creator, it checks that the redirect to URL is a path on the main URL/host_url, If it exists it will route to it, otherwise throw the 404 error & the next_page check here is to ensure that the client doesn't get redirected to /None path(valid path if not check though), This is super nice and helps prevent the open-redirects attacks ;)
+            return redirect(f'{next_page}') if next_page and is_safe_url(next_page) else redirect(url_for('index'))
         flash('Login Unsuccessful. Please check email address and password', 'failure')
     return render_template('login.html', page_title='Flask Blog | Login', form=form)
 
@@ -116,7 +107,7 @@ def save_picture(form_img):
 # Auto-cleaning function for the user old profile pics
 def clean_old_pictures():
     pictures_path = os.path.join(
-        app.root_path, f'static/images/profile_pics/{current_user.profile_dir}/')
+        app.root_path, f'static/images/profile_pics/{current_user.profile_dir}')
     pictures = os.listdir(pictures_path)
     current_user_img = current_user.img_file
 
@@ -155,6 +146,64 @@ def account():
             flash('Nothing was updated, hence, nothing changed!', 'info')
         return redirect(url_for('account'))
     return render_template('account.html', page_title='Account', img_file_src=get_img_src(), form=form)
+
+
+@app.route('/post/new', methods=['GET', 'POST'])
+@login_required
+def create_post():
+    form = PostForm()
+    if form.validate_on_submit():
+        new_post = Post(title=form.title.data,
+                        content=form.content.data, date_updated=None, author=current_user)
+        db.session.add(new_post)
+        db.session.commit()
+        flash('Your post has been created!', 'success')
+        return redirect(url_for('index'))
+    return render_template('create_post.html', page_title='New Post', form=form, img_file_src=get_img_src())
+
+
+@app.route('/post/<int:post_id>')
+def post(post_id):
+    user_post = Post.query.get_or_404(post_id)
+    return render_template('post.html', page_title=user_post.title, post=user_post, img_file_src=get_img_src())
+
+
+@app.route('/post/<int:post_id>/update', methods=['GET', 'POST'])
+@login_required
+def update_post(post_id):
+    form = PostForm()
+    user_post = Post.query.get_or_404(post_id)
+
+    if user_post.author != current_user:
+        abort(403)
+
+    if request.method == 'GET':
+        form.title.data = user_post.title
+        form.content.data = user_post.content
+
+    if form.validate_on_submit():
+        user_post.title = form.title.data
+        user_post.content = form.content.data
+        user_post.date_updated = datetime.now()
+        db.session.commit()
+        flash('Your post has been updated!', 'success')
+        return redirect(url_for('index'))
+
+    return render_template('update_post.html', page_title='Update Post', form=form, img_file_src=get_img_src())
+
+
+@app.route('/post/<int:post_id>/delete', methods=['POST'])
+@login_required
+def delete_post(post_id):
+    user_post = Post.query.get_or_404(post_id)
+
+    if user_post.author != current_user:
+        abort(403)
+
+    db.session.delete(user_post)
+    db.session.commit()
+    flash('Your Post Has Been Deleted Successfully!', 'success')
+    return redirect(url_for('index'))
 
 
 @app.route('/logout')

@@ -1,0 +1,61 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="media-container">
+    {% if post.author.img_file == 'default.png' %}
+    <img src="{{ url_for('static', filename='images/profile_pics/' + post.author.img_file) }}" alt="Profile Picture"
+        class="circle">
+    {% else %}
+    <img src="{{ url_for('static', filename='images/profile_pics/' + post.author.profile_dir + post.author.img_file) }}"
+        alt="Profile Picture" class="circle">
+    {% endif %}
+    <span class="article-author">{{post.author.username.title()}}</span>
+    <div class="row">
+        <div class="col s6">
+            <small class="text-muted">Date Created: {{post.date_created.strftime('%Y-%m-%d')}}</small>
+        </div>
+        <div class="col s12"></div>
+        <div class="col s6">
+            {% if post.date_updated != None %}
+            <small class="text-muted text-lime">Last Updated:
+                {{post.date_updated.strftime('%Y-%m-%d %H:%M')}}</small>
+            {% endif %}
+        </div>
+    </div>
+
+    <div class="divider"></div>
+    <h4>{{post.title}}</h4>
+    <p>{{post.content}}</p>
+    {% if post.author == current_user %}
+    <div class="divider"></div>
+    <div class="modify-post">
+        <div class="row">
+            <div class="col offset-l2">
+                <a href="{{ url_for('update_post', post_id=post.id) }}"
+                    class="waves-effect waves-light btn green darken-2 white-text"><i
+                        class="material-icons right">mode_edit</i>Update Post</a>
+            </div>
+            <div class="col">
+                <a href="#confirm-delete" class="waves-effect waves-light btn red darken-1 white-text modal-trigger"><i
+                        class="material-icons right">remove</i>Delete Post</a>
+            </div>
+        </div>
+
+        <div id="confirm-delete" class="modal">
+            <div class="modal-content">
+                <h5>Are You Sure You Want To Delete This Post?<i class="material-icons medium left red-text">warning</i>
+                </h5>
+            </div>
+            <div class="divider"></div>
+            <div class="modal-footer">
+                <form action="{{ url_for('delete_post', post_id=post.id) }}" method="POST">
+                    <a href="#" class="modal-close waves-effect waves-green btn blue darken-1">Close</a>
+                    <button type="submit" class="waves-effect waves-light btn red darken-1 white-text">Yes, I am
+                        sure</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock body %}

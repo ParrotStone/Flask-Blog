@@ -1,0 +1,38 @@
+{% extends 'layout.html' %}
+
+{% block body %}
+<div class="media-container">
+    <h3>New Post</h3>
+    <div class="divider"></div>
+    <form action="" method="POST" class="row">
+        {{ form.hidden_tag() }}
+        <div class="input-field col s10 m10 push-s1 push-m1">
+            <i class="material-icons prefix">title</i>
+            {% if form.title.errors %}
+            {{ form.title(id='title', class='invalid', **{'data-length': '60'}) }}
+            {% for error in form.title.errors %}
+            <span class="helper-text" data-error="{{error}}">{{error}}</span>
+            {% endfor %}
+            {% else %}
+            {{ form.title(id='title', **{'data-length': '60'}) }}
+            {% endif %}
+            {{ form.title.label(for='title') }}
+        </div>
+        <div class="input-field col s10 m10 push-s1 push-m1">
+            <i class="material-icons prefix">note</i>
+            {% if form.content.errors %}
+            {{ form.content(id='content', class='invalid materialize-textarea') }}
+            {% for error in form.content.errors %}
+            <span class="helper-text" data-error="{{error}}">{{error}}</span>
+            {% endfor %}
+            {% else %}
+            {{ form.content(id='content', class='materialize-textarea') }}
+            {% endif %}
+            {{ form.content.label(for='content') }}
+        </div>
+        <div class="input-field col s10 m10 push-s1 push-m1">
+            <button type="submit" class="waves-effect waves-light btn yellow darken-1 black-text">Create Post</button>
+        </div>
+    </form>
+</div>
+{% endblock body %}

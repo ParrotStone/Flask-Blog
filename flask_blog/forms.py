@@ -78,3 +78,10 @@ class UpdateAccountForm(FlaskForm):
             if User.query.filter_by(email=email.data.lower()).first():
                 raise ValidationError(
                     'Email is already taken. Please choose a different one. Capitalization is not considered.')
+
+
+class PostForm(FlaskForm):
+    title = StringField('Post Title', validators=[
+                        validators.DataRequired(), validators.Length(max=60)])
+    content = TextAreaField('Post Content', validators=[
+                            validators.DataRequired()])

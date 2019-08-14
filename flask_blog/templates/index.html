@@ -3,11 +3,31 @@
 {% block body %}
 {% for post in posts %}
 <div class="media-container">
-    <span class="article-author">{{post['author']}}</span>
-    <small class="text-muted">{{post['date_created']}}</small>
+    {% if post.author.img_file == 'default.png' %}
+    <img src="{{ url_for('static', filename='images/profile_pics/' + post.author.img_file) }}" alt="Profile Picture"
+        class="circle">
+    {% else %}
+    <img src="{{ url_for('static', filename='images/profile_pics/' + post.author.profile_dir + post.author.img_file) }}"
+        alt="Profile Picture" class="circle">
+    {% endif %}
+    <span class="article-author">{{post.author.username.title()}}</span>
+    <small class="text-muted">{{post.date_created.strftime('%Y-%m-%d')}}</small>
     <div class="divider"></div>
-    <h3><a href="">{{post['title']}}</a></h3>
-    <p>{{post['content']}}</p>
+    <h4>
+        <a href="{{ url_for('post', post_id=post.id) }}">{{post.title}}</a>
+    </h4>
+    <p>
+        {% if post.content|length >= 30 and post.content.split('.')[2] %}
+        {{post.content.split('.')[0] + '. ' + post.content.split('.')[1] + '...'}}
+        {% else %}
+        {{post.content}}
+        {% endif %}
+    </p>
+    <div>
+        <div class="divider"></div>
+        <a href="{{ url_for('post', post_id=post.id) }}" class="waves-effect waves-light btn blue-grey white-text">Read
+            More</a>
+    </div>
 </div>
 {% endfor %}
 {% endblock body %}

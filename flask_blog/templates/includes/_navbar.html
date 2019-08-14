@@ -16,6 +16,7 @@
             <ul class="right hide-on-med-and-down">
                 {% if current_user.is_authenticated %}
                 <ul id="account-dropdown" class="dropdown-content">
+                    <li><a href="{{url_for('create_post')}}">New Post</a></li>
                     <li><a href="{{url_for('account')}}">Account</a></li>
                     <li><a href="{{url_for('logout')}}">Logout</a></li>
                 </ul>
@@ -56,7 +57,9 @@
     <div class="divider"></div>
     <li><a href="{{url_for('about')}}"><i class="material-icons">info</i>About</a></li>
     <div class="divider"></div>
-    <!-- Insert New Links HERE -->
+    <li><a href="{{url_for('create_post')}}"><i class="material-icons">note_add</i>New Post</a></li>
+    <div class="divider"></div>
+    <!-- Insert New Links HERE... -->
     <li><a href="{{url_for('account')}}"><i class="material-icons">account_circle</i>Account</a></li>
     <div class="divider"></div>
     <li><a href="{{url_for('logout')}}"><i class="material-icons">exit_to_app</i>Logout</a></li>

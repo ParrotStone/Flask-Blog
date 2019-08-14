@@ -20,10 +20,6 @@ a {
     transition: all .3s ease;
 }
 
-i {
-    transition: all .3s ease;
-}
-
 div.inner-container {
     margin-top: 50px;
 }
@@ -74,7 +70,19 @@ div.inner-container {
     /* border-right: 2px solid var(--primary-color) !important; */
 /* } */
 
+/* Index/Home page styles */
+.circle {
+    display: inline-block;
+    margin: 0 -10px -10px 0;
+    width: 50px;
+    height: 50px;
+}
+
 /* Main-Nav styles */
+.nav-wrapper > ul:last-child {
+    height: 0px;
+}
+
 .nav-img {
     width: 25px;
     height: 25px;
@@ -136,8 +144,12 @@ ul.sidenav li a:hover i {
     margin: 0 0 30px;
 }
 
-.media-container a:hover {
+.media-container h4 > a:hover {
     color: var(--primary-color);
+}
+
+.media-container a.blue-grey {
+    margin-top: 15px;
 }
 
 .media-container form.row {
@@ -175,4 +187,24 @@ p.forgot-pass {
 
 .row > h4 {
     margin-top: 0;
+}
+
+/* Post styles */
+.modify-post {
+    padding-top: 20px;
+}
+
+/* Modify materialize default margin for icons inside of buttons '.right' */
+.modify-post .col .right {
+    margin-left: 7px !important;
+}
+
+/* Modify materialize default medium styles */
+.modify-post i.medium {
+    font-size: 3rem;
+    line-height: 25px;
+}
+
+.modify-post .modal-footer button[type="submit"] {
+    margin: 0 20px !important;
 }
