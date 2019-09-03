@@ -43,7 +43,7 @@ def register():
     if request.method == 'POST':
         if form.validate_on_submit():
             hashed_pwd = app_bcrypt.generate_password_hash(
-                form.password.data, 13).decode('utf-8')
+                form.password.data, 13)
             user_path = os.path.join(
                 app.root_path, 'static/images/profile_pics/')
             user_dir_name = f'{secrets.token_hex(12)}/'
