@@ -9,10 +9,10 @@ $(document).ready(function () {
     $('.media-container .input-field input#username').characterCounter();
     $('.media-container .input-field textarea#brief_info').characterCounter();
     $('.media-container .input-field input#title').characterCounter();
-    // Remove the alerts after 4 seconds
+    // Remove the alerts after 3 seconds
     setTimeout(() => {
         $('.alert').slideUp(300);
-    }, 4000);
+    }, 3000);
 
     // Activating the Dropdown plugin in Materialize JS
     $('.dropdown-trigger').dropdown({ hover: false });
